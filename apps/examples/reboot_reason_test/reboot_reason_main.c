@@ -88,6 +88,15 @@ static void display_reboot_reason_option(void)
 	printf("\t-Press X or x : Terminate Tests.\n");
 }
 #ifdef CONFIG_WATCHDOG
+static void watchdog_handler(int irq, void *context, FAR void *arg)
+{
+	//
+	//
+	//up_assert((const uint8_t *)__FILE__, (int)__LINE__);
+	lldbg("Here is watchdog_handler forever\n");
+	for(;;);
+}
+
 static void watchdog_test(void)
 {
 	int fd;
@@ -112,6 +121,17 @@ static void watchdog_test(void)
 		close(fd);
 		return;
 	}
+
+	printf("Strat WDIOC_CAPTURE.\n");
+	FAR struct watchdog_capture_s cap;
+	cap.newhandler = watchdog_handler;
+	ret = ioctl(fd, WDIOC_CAPTURE, (unsigned long)&cap);
+	if (ret != OK) {
+		printf("ERROR: Fail to change capture.\n");
+		close(fd);
+		return;
+	}
+	printf("Done WDIOC_CAPTURE.\n");
 
 	/* Wait until watchdog timeout */
 	while (1);
