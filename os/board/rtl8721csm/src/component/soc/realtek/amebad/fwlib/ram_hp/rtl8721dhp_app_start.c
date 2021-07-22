@@ -1372,6 +1372,10 @@ extern void __libc_init_array(void);
 		"mov sp, r0\n"
 	);
 
+DBG_8195A("\r\nTesting App Before Enable \r\n");
+DBG_ERR_MSG_ON(MODULE_MISC);
+DBG_8195A("\r\nTesting App After Enable \r\n");
+
 #ifdef CONFIG_PLATFORM_TIZENRT_OS
 	mpu_init();
 	app_mpu_nocache_init();
